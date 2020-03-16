@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/080bc694-5fac-4aaf-a053-ae1493ea0635/resourceGroups/default/providers/Microsoft.Web/sites/api-dasa",
+    "appService.deploySubpath": ""
+}
