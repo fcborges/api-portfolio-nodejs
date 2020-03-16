@@ -1,34 +1,35 @@
 class Tabelas {
     init(conexao) {
         this.conexao = conexao
+        this.criarLaboratorios();
+        this.criarExames();
 
-        this.criarAtendimentos();
-        this.criarAlunos();
     }
 
-    criarAtendimentos() {
-        const sql = 'CREATE TABLE IF NOT EXISTS Atendimentos (id int NOT NULL AUTO_INCREMENT, cliente varchar(50) NOT NULL, pet varchar(20), servico varchar(20) NOT NULL, data datetime NOT NULL, dataCriacao datetime NOT NULL, status varchar(20) NOT NULL, observacoes text, PRIMARY KEY(id))'
-
-        this.conexao.query(sql, erro => {
-            if (erro) {
-                console.log(erro);
-            } else {
-                console.log('Tabela Atendimentos criada com sucesso');
-            }
-        })
-    }
-
-    criarAlunos() {
-        const sql = 'CREATE TABLE IF NOT EXISTS Alunos (id int NOT NULL AUTO_INCREMENT, NM_NOME_COMPLETO varchar(50), DS_TURMA varchar(30), DS_STATUS varchar(20), DT_CRIACAO date, PRIMARY KEY(id))'
+    criarLaboratorios() {
+        const sql = 'CREATE TABLE IF NOT EXISTS Laboratorios (id int NOT NULL AUTO_INCREMENT, exameId int, nome varchar(50), endereco varchar(30), status varchar(20), dataInclusao date, PRIMARY KEY(id))'
 
         this.conexao.query(sql, (erro) => {
             if (erro) {
                 console.log(erro)
-            }else{
-                console.log('tabela alunos criada com sucesso!')
+            } else {
+                console.log('tabela Laboratorios criada com sucesso!')
             }
         })
     }
+
+    criarExames() {
+        const sql = 'CREATE TABLE IF NOT EXISTS Exames (id int NOT NULL AUTO_INCREMENT, nome varchar(50), tipo varchar(30), status varchar(20), dataInclusao date, PRIMARY KEY(id))'
+
+        this.conexao.query(sql, (erro) => {
+            if (erro) {
+                console.log(erro)
+            } else {
+                console.log('tabela exames criada com sucesso!')
+            }
+        })
+    }
+
 }
 
 module.exports = new Tabelas

@@ -1,39 +1,16 @@
 const moment = require('moment')
 const conexao = require('../infraestrutura/conexao')
 
-class aluno {
-    adiciona(aluno, res) {
-        console.log('aluno - api',aluno);
-        const DT_CRIACAO = moment().format('YYYY-MM-DD')
-        //const data = moment(aluno.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS')
+class exame {
+    adiciona(exame, res) {
+        console.log('exames - api',exame);
+        const dataInclusao = moment().format('YYYY-MM-DD')
+        const exameDatado = { ...exame, dataInclusao }
+        const sql = 'INSERT INTO exame SET ?'
 
-        // const dataEhValida = moment(data).isSameOrAfter(dataCriacao)
-        // const clienteEhValido = aluno.cliente.length >= 5
-
-        /*  const validacoes = [
-             {
-                 nome: 'data',
-                 valido: dataEhValida,
-                 mensagem: 'Data deve ser maior ou igual a data atual'
-             },
-             {
-                 nome: 'cliente',
-                 valido: clienteEhValido,
-                 mensagem: 'Cliente deve ter pelo menos cinco caracteres'
-             }
-         ] */
-
-        //const erros = validacoes.filter(campo => !campo.valido)
-        //const existemErros = erros.length
-
-
-        const alunoDatado = { ...aluno, DT_CRIACAO }
-
-        const sql = 'INSERT INTO Alunos SET ?'
-
-        conexao.query(sql, alunoDatado, (erro, resultados) => {
+        conexao.query(sql, exameDatado, (erro, resultados) => {
             console.log('sql:',sql);
-            console.log('alunoDatado:',alunoDatado);
+            console.log('exameDatado:',exameDatado);
             console.log('resultados:',resultados);
 
             if (erro) {
@@ -47,7 +24,7 @@ class aluno {
     }
 
     lista(res) {
-        const sql = 'SELECT * FROM Alunos'
+        const sql = 'SELECT * FROM Exames'
 
         conexao.query(sql, (erro, resultados) => {
             if (erro) {
@@ -59,14 +36,27 @@ class aluno {
     }
 
     buscaPorId(id, res) {
-        const sql = `SELECT * FROM Alunos WHERE id=${id}`
+        const sql = `SELECT * FROM Exames WHERE id=${id}`
 
         conexao.query(sql, (erro, resultados) => {
-            const aluno = resultados[0]
+            const exame = resultados[0]
             if (erro) {
                 res.status(400).json(erro)
             } else {
-                res.status(200).json(aluno)
+                res.status(200).json(exame)
+            }
+        })
+    }
+
+    buscaPorNome(nome, res) {
+        const sql = `select b.dataInclusao, b.nome, b.status, b.tipo from bghm1fgr0xbsqc3j.Laboratorios a , bghm1fgr0xbsqc3j.Exames b where a.exameId = b.id and b.nome = ${nome}`
+
+        conexao.query(sql, (erro, resultados) => {
+            const exame = resultados[0]
+            if (erro) {
+                res.status(400).json(erro)
+            } else {
+                res.status(200).json(exame)
             }
         })
     }
@@ -75,7 +65,7 @@ class aluno {
         if (valores.data) {
             valores.data = moment(valores.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS')
         }
-        const sql = 'UPDATE alunos SET ? WHERE id=?'
+        const sql = 'UPDATE Exames SET ? WHERE id=?'
 
         conexao.query(sql, [valores, id], (erro, resultados) => {
             if (erro) {
@@ -87,7 +77,7 @@ class aluno {
     }
 
     deleta(id, res) {
-        const sql = 'DELETE FROM alunos WHERE id=?'
+        const sql = 'UPDATE bghm1fgr0xbsqc3j.Exames l SET l.status = "inativo" WHERE id = ?'
 
         conexao.query(sql, id, (erro, resultados) => {
             if (erro) {
@@ -99,4 +89,4 @@ class aluno {
     }
 }
 
-module.exports = new aluno
+module.exports = new exame
