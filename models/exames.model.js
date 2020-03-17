@@ -6,7 +6,7 @@ class exame {
         console.log('exames - api',exame);
         const dataInclusao = moment().format('YYYY-MM-DD')
         const exameDatado = { ...exame, dataInclusao }
-        const sql = 'INSERT INTO exame SET ?'
+        const sql = 'INSERT INTO Exames SET ?'
 
         conexao.query(sql, exameDatado, (erro, resultados) => {
             console.log('sql:',sql);
